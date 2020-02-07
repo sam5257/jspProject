@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,18 +75,19 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping(value = "/edit", method = {RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView edit(@RequestParam("id") String id) {
-		List<Employee> employee = employeeService.getSingleEmployee(Long.parseLong(id));
+	@ModelAttribute("e")
+	public ModelAndView edit(@RequestParam("id") String id,Model m) {
+		Employee employee = employeeService.getSingleEmployee(Long.parseLong(id));
 		ModelAndView model = new ModelAndView("edit");
+	    m.addAttribute("e",new Employee());
 		model.addObject("employee", employee);
 		return model;
 	}
-	@RequestMapping(value = "/update", method = RequestMethod.GET)
-	public ModelAndView update(@RequestParam("id") String id) {
-		List<Employee> employee = employeeService.updateEmployee(Long.parseLong(id));
-		ModelAndView model = new ModelAndView("updateEmployee");
-		model.addObject("employees", employee);
-		return model;
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String update(@ModelAttribute("emp") Employee e) {
+		 employeeService.updateEmployee(e);
+		 return "redirect:/getEmployees";
+		
 	}
 	
 	

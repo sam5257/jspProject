@@ -4,8 +4,10 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -68,7 +70,7 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao{
 		 
 		  int rows = template.update(sql, params, types);
 		 		
-	}
+	}/*
 
 	@Override
 	public List<Employee> getEmployee(long id) {
@@ -86,7 +88,40 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao{
 		
 		return result;
 		
+		
+		
 	}
+*/
 
+	 @Override
+	 public Employee getEmployee(long id)
+	 {
+		 String sql ="select * from employee where empId=?";
+		 Object[] inputs = new Object[] {id};
+
+		 List<Map<String, Object>> rows=getJdbcTemplate().queryForList(sql,inputs);
+		 
+		 Employee emp=new Employee();
+		 
+		 for(Map<String, Object> row:rows)
+		 {
+		 	emp.setEmpId((String)row.get("empId"));
+		 	emp.setEmpName((String)row.get("empName"));}
+		
+	return emp; 
+	 }
+
+	@Override
+	public void update(Employee e) {
+  
+		String empId=e.getEmpId();
+		String empName=e.getEmpName();
+		String sql ="update employee set empName=? where empId=?";
+		 Object[] inputs = new Object[] {empName,empId};
+		 
+		 getJdbcTemplate().update(sql,inputs);
+
+		
+	}
 
 }

@@ -31,13 +31,12 @@ public class EmployeeServiceImpl implements EmployeeService{
   }
 
 	@Override
-	public List<Employee> getSingleEmployee(long id) {
+	public Employee getSingleEmployee(long id) {
 		return employeeDao.getEmployee(id);
 	}
 
 	@Override
-	public List<Employee> updateEmployee(long parseLong) {
-		// TODO Auto-generated method stub
-		return null;
+	public void updateEmployee(Employee s) {
+			employeeDao.update(s);
 	}
 }
